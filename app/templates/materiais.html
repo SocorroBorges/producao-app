@@ -15,10 +15,25 @@
 
 <h2>Lista de Materiais</h2>
 
-<ul>
+<table border="1">
+    <tr>
+        <th>Nome</th>
+        <th>Custo</th>
+        <th>Unidade</th>
+        <th>Ações</th>
+    </tr>
+
 {% for material in materiais %} <!--percorre a lista-->
-    <li>
-        {{ material.nome }} - R$ {{ material.custo_unitario }} {{ material.unidade_medida }}
-    </li>
+<tr>
+    <td>{{ material.nome }}</td>
+    <td> R$ {{ "%.2f"|format(material.custo_unitario) }}</td>
+    <td>{{ material.unidade_medida }}</td>
+    <td>
+        <a href="{{ url_for('main.editar_material', id=material.id) }}">Editar</a>
+        |
+        <a href="/excluir_material/{{ material.id }}">Excluir</a>
+    </td>
+</tr>
 {% endfor %}
-<ul>
+
+</table>

@@ -35,3 +35,34 @@ def materiais():
     session.close()
 
     return render_template("materiais.html", materiais=materiais)
+
+@main.route("/excluir_material/<int:id>")
+def excluir_material(id):
+    session = SessionLocal()
+
+    material = session.query(Material).get(id)
+
+    if material:
+        session.delete(material)
+        session.commit()
+
+    session.close()
+
+    return redirect(url_for("main.materiais"))
+
+@main.route("/editar_material/<int:id>", methods=["GET", "POST"])
+def editar_material(id):
+    session = SessionLocal()
+    material = session.query(Material).get(id)
+
+    if request.method == "POST":
+        material.nome = request.form["nome"]
+        material.custo_unitario = Decimal(request.form["custo_unitario"])
+        material.unidade_medida = request.form["unidade"]
+
+        session.commit()
+        session.close()
+
+        return redirect(url_for("main.materiais"))
+    
+    return render_template("editar_material.html", material=material)
