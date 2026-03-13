@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from app.database import SessionLocal
 from app.models import Material
 from decimal import Decimal
@@ -50,19 +50,33 @@ def excluir_material(id):
 
     return redirect(url_for("main.materiais"))
 
-@main.route("/editar_material/<int:id>", methods=["GET", "POST"])
-def editar_material(id):
+@main.route("/editar_inline", methods=["POST"])
+def editar_inline():
+
+    dados = request.get_json()
+
+    id_material = dados["id"]
+    campo = dados["campo"]
+    valor = dados["valor"]
+
     session = SessionLocal()
-    material = session.query(Material).get(id)
 
-    if request.method == "POST":
-        material.nome = request.form["nome"]
-        material.custo_unitario = Decimal(request.form["custo_unitario"])
-        material.unidade_medida = request.form["unidade"]
+    material = session.query(Material).get(id_material)
 
-        session.commit()
+    if not material:
         session.close()
-
-        return redirect(url_for("main.materiais"))
+        return jsonify({"status": "erro", "mensagem": "Material não encontrado"})
     
-    return render_template("editar_material.html", material=material)
+    if campo == "nome":
+        material.nome = valor
+
+    elif campo == "custo_unitario":
+        material.custo_unitario = Decimal(valor)
+
+    elif campo == "unidade_medida":
+        material.unidade_medida = valor
+
+    session.commit()
+    session.close()
+
+    return jsonify({"status": "ok"})
