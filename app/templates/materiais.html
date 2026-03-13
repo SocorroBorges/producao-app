@@ -15,10 +15,43 @@
 
 <h2>Lista de Materiais</h2>
 
-<ul>
+<table border="1">
+    <tr>
+        <th>Nome</th>
+        <th>Custo</th>
+        <th>Unidade</th>
+        <th>Ações</th>
+    </tr>
+
 {% for material in materiais %} <!--percorre a lista-->
-    <li>
-        {{ material.nome }} - R$ {{ material.custo_unitario }} {{ material.unidade_medida }}
-    </li>
+<tr>
+    <td contenteditable="true" class="editavel"
+        data-id="{{ material.id }}"
+        data-campo="nome">
+        {{ material.nome }}
+    </td>
+    
+    <td contenteditable="true" class="editavel"
+        data-id="{{ material.id }}"
+        data-campo="custo_unitario">
+        {{ material.custo_unitario }}
+    </td>
+
+    <td contenteditable="true" class="editavel"
+        data-id="{{ material.id }}"
+        data-campo="unidade_medida">
+        {{ material.unidade_medida}}
+    </td>
+    
+    <td>
+        <a href="{{ url_for('main.excluir_material', id=material.id) }}"
+        onclick="return confirm('Tem certeza que deseja excluir este material?')">
+        Excluir
+        </a>
+    </td>
+</tr>
 {% endfor %}
-<ul>
+
+</table>
+
+<script src="{{ url_for('static', filename='js/materiais.js') }}"></script>

@@ -1,0 +1,18 @@
+<h2>Editar Material</h2>
+
+<form method="POST">
+
+<label>Nome</label>
+<input type="text" name="nome" value="{{ material.nome }}">
+
+<label>Custo Unitário</label>
+<input type="number" name="custo_unitario" value="{{ material.custo_unitario }}">
+
+<label>Unidade</label>
+<input type="text" name="unidade" value="{{ material.unidade_medida }}">
+
+<button type="submit">Salvar Alterações</button>
+
+</form>
+
+<a href="/materiais">Voltar</a>

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from app.database import SessionLocal
 from app.models import Material
 from decimal import Decimal
@@ -35,3 +35,48 @@ def materiais():
     session.close()
 
     return render_template("materiais.html", materiais=materiais)
+
+@main.route("/excluir_material/<int:id>")
+def excluir_material(id):
+    session = SessionLocal()
+
+    material = session.query(Material).get(id)
+
+    if material:
+        session.delete(material)
+        session.commit()
+
+    session.close()
+
+    return redirect(url_for("main.materiais"))
+
+@main.route("/editar_inline", methods=["POST"])
+def editar_inline():
+
+    dados = request.get_json()
+
+    id_material = dados["id"]
+    campo = dados["campo"]
+    valor = dados["valor"]
+
+    session = SessionLocal()
+
+    material = session.query(Material).get(id_material)
+
+    if not material:
+        session.close()
+        return jsonify({"status": "erro", "mensagem": "Material não encontrado"})
+    
+    if campo == "nome":
+        material.nome = valor
+
+    elif campo == "custo_unitario":
+        material.custo_unitario = Decimal(valor)
+
+    elif campo == "unidade_medida":
+        material.unidade_medida = valor
+
+    session.commit()
+    session.close()
+
+    return jsonify({"status": "ok"})
