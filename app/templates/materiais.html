@@ -25,13 +25,29 @@
 
 {% for material in materiais %} <!--percorre a lista-->
 <tr>
-    <td>{{ material.nome }}</td>
-    <td> R$ {{ "%.2f"|format(material.custo_unitario) }}</td>
-    <td>{{ material.unidade_medida }}</td>
+    <td contenteditable="true" class="editavel"
+        data-id="{{ material.id }}"
+        data-campo="nome">
+        {{ material.nome }}
+    </td>
+    
+    <td contenteditable="true" class="editavel"
+        data-id="{{ material.id }}"
+        data-campo="{{ material.id }}"
+        data-campo="custo_unitario">
+    </td>
+
+    <td contenteditable="true" class="editavel"
+        data-id="{{ material.id }}"
+        data-campo="unidade_medida">
+        {{ material.unidade_medida}}
+    </td>
+    
     <td>
-        <a href="{{ url_for('main.editar_material', id=material.id) }}">Editar</a>
-        |
-        <a href="/excluir_material/{{ material.id }}">Excluir</a>
+        <a href="{{ url_for('main.excluir_material', id=material.id) }}"
+        onclick="return confirm('Tem certeza que deseja excluir este material?')">
+        Excluir
+        </a>
     </td>
 </tr>
 {% endfor %}
