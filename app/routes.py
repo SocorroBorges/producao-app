@@ -55,26 +55,17 @@ def editar_inline():
 
     dados = request.get_json()
 
-    id_material = dados["id"]
-    campo = dados["campo"]
-    valor = dados["valor"]
-
     session = SessionLocal()
 
-    material = session.query(Material).get(id_material)
+    material = session.query(Material).get(dados["id"])
 
     if not material:
         session.close()
-        return jsonify({"status": "erro", "mensagem": "Material não encontrado"})
+        return jsonify({"status": "erro"})
     
-    if campo == "nome":
-        material.nome = valor
-
-    elif campo == "custo_unitario":
-        material.custo_unitario = Decimal(valor)
-
-    elif campo == "unidade_medida":
-        material.unidade_medida = valor
+    material.nome = dados["nome"]
+    material.custo_unitario = Decimal(dados["custo_unitario"])
+    material.unidade_medida = dados["unidade_medida"]
 
     session.commit()
     session.close()
