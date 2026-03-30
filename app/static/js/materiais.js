@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function abrirModal(id, nome, custo, unidade) {
-    document.getElementById("modal").style.display = "block"
+    document.getElementById("modal").style.display = "flex"
 
     document.getElementById("edit-id").value = id
     document.getElementById("edit-nome").value = nome
@@ -23,7 +23,7 @@ function abrirModal(id, nome, custo, unidade) {
 }
 
 function fecharModal() {
-    document.getElementById("modal").style.display = "nome"
+    document.getElementById("modal").style.display = "none"
 }
 
 function salvarEdicao() {
